@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Havola mavjud emas — Shortly{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto py-20 text-center">
+    <div class="w-20 h-20 mx-auto rounded-3xl bg-red-500/10 text-red-300 flex items-center justify-center text-4xl mb-6">
+        {% if short_url.is_expired %}⏰{% else %}🚫{% endif %}
+    </div>
+    <h1 class="text-2xl font-bold mb-3">
+        {% if short_url.is_expired %}
+            Havola muddati tugagan
+        {% else %}
+            Havola to'xtatilgan
+        {% endif %}
+    </h1>
+    <p class="text-slate-400 mb-8">
+        {% if short_url.is_expired %}
+            Bu qisqa havolaning amal qilish muddati {{ short_url.expires_at|date:'d.m.Y H:i' }} da tugagan.
+        {% else %}
+            Bu qisqa havola egasi tomonidan vaqtincha to'xtatilgan.
+        {% endif %}
+    </p>
+    <a href="{% url 'main:home' %}"
+       class="inline-block px-8 py-3 rounded-xl font-semibold bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 shadow-lg shadow-indigo-500/25 transition">
+        Bosh sahifaga qaytish
+    </a>
+</div>
+{% endblock %}

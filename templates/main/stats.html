@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ short_url.short_code }} statistikasi — Shortly{% endblock %}
+
+{% block content %}
+<div class="py-4" id="stats-root"
+     data-stats-url="{% url 'main:stats_api' short_url.short_code %}">
+
+    <!-- Sarlavha -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div class="min-w-0">
+            <a href="{% url 'accounts:dashboard' %}" class="text-sm text-slate-400 hover:text-indigo-300 transition">&larr; Kabinetga qaytish</a>
+            <h1 class="text-3xl font-bold mt-2">📊 Havola statistikasi</h1>
+            <div class="mt-3 flex flex-col gap-1 text-sm">
+                <a href="{{ short_url.get_short_url }}" target="_blank" rel="noopener"
+                   class="font-mono text-indigo-300 hover:text-indigo-200 break-all">{{ request.scheme }}://{{ request.get_host }}/{{ short_url.short_code }}/</a>
+                <span class="text-slate-500 truncate" title="{{ short_url.original_url }}">&rarr; {{ short_url.original_url }}</span>
+            </div>
+        </div>
+        <button type="button" id="copy-short-url"
+                data-url="{{ request.scheme }}://{{ request.get_host }}/{{ short_url.short_code }}/"
+                class="copy-btn shrink-0 px-5 py-2.5 rounded-xl text-sm font-semibold bg-slate-800 hover:bg-indigo-500/20 hover:text-indigo-300 border border-slate-700 transition">
+            📋 Nusxalash
+        </button>
+    </div>
+
+    <!-- Asosiy ko'rsatkichlar -->
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800">
+            <p class="text-sm text-slate-400 mb-1">Jami bosishlar</p>
+            <p class="text-3xl font-extrabold text-violet-300" id="stat-total">—</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800">
+            <p class="text-sm text-slate-400 mb-1">Bugungi bosishlar</p>
+            <p class="text-3xl font-extrabold text-sky-300" id="stat-today">—</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 col-span-2 lg:col-span-1">
+            <p class="text-sm text-slate-400 mb-1">Yaratilgan</p>
+            <p class="text-xl font-bold text-slate-200 mt-2">{{ short_url.created_at|date:'d.m.Y H:i' }}</p>
+        </div>
+    </div>
+
+    <!-- Grafiklar -->
+    <div class="grid lg:grid-cols-3 gap-6 mb-8">
+        <div class="lg:col-span-3 p-6 rounded-2xl bg-slate-900/60 border border-slate-800">
+            <h2 class="font-bold text-lg mb-4">Oxirgi 30 kunlik bosishlar</h2>
+            <div class="relative h-72"><canvas id="daily-chart"></canvas></div>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 lg:col-span-1">
+            <h2 class="font-bold text-lg mb-4">Brauzerlar</h2>
+            <div class="relative h-64"><canvas id="browser-chart"></canvas></div>
+            <p id="browser-empty" class="hidden text-center text-sm text-slate-500 py-10">Hozircha ma'lumot yo'q</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 lg:col-span-1">
+            <h2 class="font-bold text-lg mb-4">Qurilmalar</h2>
+            <div class="relative h-64"><canvas id="device-chart"></canvas></div>
+            <p id="device-empty" class="hidden text-center text-sm text-slate-500 py-10">Hozircha ma'lumot yo'q</p>
+        </div>
+
+        <!-- Oxirgi bosishlar -->
+        <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 lg:col-span-1">
+            <h2 class="font-bold text-lg mb-4">Oxirgi bosishlar</h2>
+            <ul id="recent-list" class="space-y-3 text-sm"></ul>
+            <p id="recent-empty" class="hidden text-center text-sm text-slate-500 py-10">Hozircha bosishlar yo'q</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/stats.js' %}"></script>
+{% endblock %}

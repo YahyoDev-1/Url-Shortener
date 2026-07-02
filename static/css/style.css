@@ -1,0 +1,41 @@
+/* Shortly — qo'shimcha uslublar (Tailwind CDN ustiga) */
+
+/* Xabarlarning silliq yo'qolishi */
+.msg-item {
+    animation: msg-in 0.3s ease;
+}
+
+.msg-item.msg-hide {
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@keyframes msg-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scrollbar (WebKit) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}

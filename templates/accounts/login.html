@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Tizimga kirish — Shortly{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto py-8">
+    <div class="p-8 rounded-2xl bg-slate-900/70 border border-slate-800 shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold">Tizimga kirish</h1>
+            <p class="mt-2 text-sm text-slate-400">Hisobingizga kiring va havolalaringizni boshqaring</p>
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="mb-4 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+                {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" novalidate class="space-y-5">
+            {% csrf_token %}
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+
+            <div>
+                <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-slate-300 mb-1.5">Foydalanuvchi nomi</label>
+                {{ form.username }}
+                {% for error in form.username.errors %}
+                    <p class="mt-1.5 text-xs text-red-400">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div>
+                <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-slate-300 mb-1.5">Parol</label>
+                {{ form.password }}
+                {% for error in form.password.errors %}
+                    <p class="mt-1.5 text-xs text-red-400">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <button type="submit"
+                    class="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 shadow-lg shadow-indigo-500/25 transition">
+                Kirish
+            </button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-slate-400">
+            Hisobingiz yo'qmi?
+            <a href="{% url 'accounts:signup' %}" class="text-indigo-400 hover:text-indigo-300 font-medium">Ro'yxatdan o'tish</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
